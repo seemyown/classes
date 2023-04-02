@@ -16,20 +16,53 @@ class Student:
         else:
             return 'Ошибка'
         
+    def average(self):
+        averages = []
+        for key, val in self.grades.items():
+            average = sum(val)/len(val)
+            averages.append(average)
+        total_avr = sum(averages)/len(averages)   
+        return total_avr   
+    
+
+    def __str__(self):
+        self.cour_in_p = ', '.join(map(str,self.courses_in_progress))
+        self.fin_cour = ', '.join(map(str,self.finished_courses))
+        return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание: {self.average()}\nКурсы в процессе изучения: {self.cour_in_p}\nЗавершенные курсы: {self.fin_cour}'
+
+    def __lt__(self, other):
+        if isinstance(other, Student):
+            return self.average() < other.average()
+            
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
         self.surname = surname
         self.courses_attached = []
         self.grades = {}
-    
-        
+         
 class Lecture(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.courses_attached = []
         self.grades = {}
+        
+    def average(self):
+        averages = []
+        for key, val in self.grades.items():
+            average = sum(val)/len(val)
+            averages.append(average)
+        total_avr = sum(averages)/len(averages)   
+        return total_avr         
 
+     
+    def __str__(self):
+        return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average()}'
+    
+    def __lt__(self, other):
+        if isinstance(other, Lecture):
+            return self.average() < other.average()
+        
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
@@ -44,30 +77,6 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
-        
+    def __str__(self) -> str:
+        return f'Имя: {self.name}\nФамилия: {self.surname}'
  
-# best_student = Student('Ruoy', 'Eman', 'your_gender')
-# best_student.courses_in_progress += ['Python']
- 
-# cool_mentor = Mentor('Some', 'Buddy')
-# cool_mentor.courses_attached += ['Python']
- 
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
- 
-# print(best_student.grades)
-
-student = Student('Jack', 'Sparrow', 'men')
-student.courses_in_progress += ['Python']
-# print(student.__dict__)
-reviewer = Reviewer('John', 'Wall')
-reviewer.courses_attached += ['Python']
-
-lecture = Lecture('Leo', 'Dicaprio')
-lecture.courses_attached += ['Python']
-# print(lecture.__dict__)
-reviewer.rate_hw(student, 'Python', 10)
-student.grade_lecture(lecture, 'Python', 8)
-print(student.__dict__)
-print(lecture.__dict__)
